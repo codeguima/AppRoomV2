@@ -34,21 +34,20 @@ import androidx.compose.ui.unit.dp
 import br.edu.up.edu.rgm_29318602.InventoryTopAppBar
 import br.edu.up.edu.rgm_29318602.R
 import br.edu.up.edu.rgm_29318602.data.Item
-import br.edu.up.edu.rgm_29318602.ui.item.formatedPrice
 import br.edu.up.edu.rgm_29318602.ui.theme.InventoryTheme
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
+    viewModel: HomeViewModel,
     navigateToItemEntry: () -> Unit,
-    navigateToItemUpdate: (Int) -> Unit,
-    modifier: Modifier = Modifier
+    navigateToItemUpdate: (Int) -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     Scaffold(
-        modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             InventoryTopAppBar(
                 title = stringResource(R.string.app_name),
@@ -70,13 +69,14 @@ fun HomeScreen(
         },
     ) { innerPadding ->
         HomeBody(
-            itemList = listOf(),
+            itemList = listOf(),  // Aqui você pode substituir pelo estado real do ViewModel
             onItemClick = navigateToItemUpdate,
-            modifier = modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             contentPadding = innerPadding,
         )
     }
 }
+
 
 @Composable
 private fun HomeBody(
@@ -148,7 +148,7 @@ private fun InventoryItem(
                 )
                 Spacer(Modifier.weight(1f))
                 Text(
-                    text = item.formatedPrice(),
+                    text = item.price.toString(),
                     style = MaterialTheme.typography.titleMedium
                 )
             }

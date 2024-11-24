@@ -1,5 +1,7 @@
 [versions]
 agp = "8.7.2"
+hiltAndroid = "2.44"
+hiltLifecycleViewmodel = "1.0.0-alpha03"
 kotlin = "2.0.0"
 coreKtx = "1.15.0"
 junit = "4.13.2"
@@ -9,15 +11,21 @@ lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.9.3"
 composeBom = "2024.11.00"
 roomCommon = "2.6.1"
+roomCompiler = "2.6.1"
 roomKtx = "2.6.1"
 ksp = "1.9.20-1.0.14"
 navigationCompose = "2.8.4"
 lifecycleViewmodelAndroid = "2.8.7"
 roomKtxVersion = "2.5.1"
+uiDesktop = "1.7.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-hilt-lifecycle-viewmodel = { module = "androidx.hilt:hilt-lifecycle-viewmodel", version.ref = "hiltLifecycleViewmodel" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
 androidx-room-ktx-v251 = { module = "androidx.room:room-ktx", version.ref = "roomKtxVersion" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomKtxVersion" }
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -35,6 +43,7 @@ androidx-room-common = { group = "androidx.room", name = "room-common", version.
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomKtx" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 androidx-lifecycle-viewmodel-android = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-android", version.ref = "lifecycleViewmodelAndroid" }
+androidx-ui-desktop = { group = "androidx.compose.ui", name = "ui-desktop", version.ref = "uiDesktop" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

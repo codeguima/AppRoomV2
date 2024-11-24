@@ -11,47 +11,77 @@ import br.edu.up.edu.rgm_29318602.ui.item.ItemDetailsScreen
 import br.edu.up.edu.rgm_29318602.ui.item.ItemEditScreen
 import br.edu.up.edu.rgm_29318602.ui.item.ItemEntryScreen
 import br.edu.up.edu.rgm_29318602.ui.home.HomeScreen
-
+import br.edu.up.edu.rgm_29318602.ui.item.ItemDetailsViewModel
+import br.edu.up.edu.rgm_29318602.ui.item.ItemEditViewModel
+import br.edu.up.edu.rgm_29318602.ui.item.ItemEntryViewModel
+import br.edu.up.edu.rgm_29318602.ui.home.HomeViewModel
 
 @Composable
 fun InventoryNavHost(
+    homeViewModel: HomeViewModel,
+    itemEntryViewModel: ItemEntryViewModel,
+    itemEditViewModel: ItemEditViewModel,
+    itemDetailsViewModel: ItemDetailsViewModel,
     navController: NavHostController,
     modifier: Modifier = Modifier,
 ) {
     NavHost(
-        navController = navController, startDestination = NavigationDestination.HomeScreen, modifier = modifier
+        navController = navController,
+        startDestination = NavigationDestination.HomeScreen,
+        modifier = modifier
     ) {
+        // Tela HomeScreen
         composable(route = NavigationDestination.HomeScreen) {
-            HomeScreen(navigateToItemEntry = { navController.navigate(NavigationDestination.ItemEntryScreen) },
-                navigateToItemUpdate = {
-                    navController.navigate("${NavigationDestination.ItemEntryScreen}/${it}")
-                })
+            HomeScreen(
+                viewModel = homeViewModel,
+                navigateToItemEntry = { navController.navigate(NavigationDestination.ItemEntryScreen) },
+                navigateToItemUpdate = { itemId ->
+                    navController.navigate("${NavigationDestination.ItemDetailsScreen}/$itemId")
+                }
+            )
         }
+
+        // Tela ItemEntryScreen
         composable(route = NavigationDestination.ItemEntryScreen) {
-            ItemEntryScreen(navigateBack = { navController.popBackStack() },
-                onNavigateUp = { navController.navigateUp() })
+            ItemEntryScreen(
+                viewModel = itemEntryViewModel,
+                navigateBack = { navController.popBackStack() },
+                onNavigateUp = { navController.navigateUp() }
+            )
         }
+
+        // Tela ItemDetailsScreen
         composable(
-            route = NavigationDestination.ItemDetailsScreen,
-            arguments = listOf(navArgument(NavigationDestination.ItemDetailsScreen) {
-                type = NavType.IntType
-            })
+            route = "${NavigationDestination.ItemDetailsScreen}/{itemId}",
+            arguments = listOf(navArgument("itemId") { type = NavType.IntType })
         ) {
+            val itemId = it.arguments?.getInt("itemId") ?: run {
+                navController.popBackStack()
+                return@composable
+            }
             ItemDetailsScreen(
-                navigateToEditItem =
-                {
-                    navController.navigate("${NavigationDestination.ItemEditScreen}/$it")
-                },
-                navigateBack = { navController.navigateUp() })
+                itemDetailsViewModel,
+                itemId = itemId,
+                navigateBack = { navController.popBackStack() },
+                modifier = modifier,
+            )
         }
+
+        // Tela ItemEditScreen
         composable(
-            route = NavigationDestination.ItemEditScreen,
-            arguments = listOf(navArgument(NavigationDestination.ItemEditScreen) {
-                type = NavType.IntType
-            })
+            route = "${NavigationDestination.ItemEditScreen}/{itemId}",
+            arguments = listOf(navArgument("itemId") { type = NavType.IntType })
         ) {
-            ItemEditScreen(navigateBack = { navController.popBackStack() },
-                onNavigateUp = { navController.navigateUp() })
+            val itemId = it.arguments?.getInt("itemId") ?: run {
+                navController.popBackStack()
+                return@composable
+            }
+            ItemEditScreen(
+                viewModel = itemEditViewModel,
+                itemId,
+                navigateBack = { navController.popBackStack() },
+                onNavigateUp = { navController.navigateUp() }
+            )
         }
     }
 }

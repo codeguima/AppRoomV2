@@ -27,7 +27,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import br.edu.up.edu.rgm_29318602.InventoryTopAppBar
 import br.edu.up.edu.rgm_29318602.R
-import br.edu.up.edu.rgm_29318602.ui.AppViewModelProvider
 import br.edu.up.edu.rgm_29318602.ui.theme.InventoryTheme
 import kotlinx.coroutines.launch
 import java.util.Currency
@@ -40,7 +39,7 @@ fun ItemEntryScreen(
     navigateBack: () -> Unit,
     onNavigateUp: () -> Unit,
     canNavigateBack: Boolean = true,
-    viewModel: ItemEntryViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewModel: ItemEntryViewModel
 ) {
     val coroutineScope = rememberCoroutineScope()
     Scaffold(

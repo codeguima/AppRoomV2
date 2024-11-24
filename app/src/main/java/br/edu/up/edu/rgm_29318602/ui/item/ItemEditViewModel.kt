@@ -18,7 +18,9 @@ class ItemEditViewModel(
     var itemUiState by mutableStateOf(ItemUiState())
         private set
 
-    private val itemId: Int = checkNotNull(savedStateHandle[NavigationDestination.ItemEditScreen])
+    private val itemId: Int = checkNotNull(savedStateHandle["itemId"]) {
+        "itemId não pode ser nulo"
+    }
 
     init {
         loadItem(itemId)
@@ -28,7 +30,8 @@ class ItemEditViewModel(
         viewModelScope.launch {
             itemsRepository.getItemStream(itemId).collect { item ->
                 itemUiState = ItemUiState(
-                    itemDetails = item?.toItemDetails() ?: ItemDetails())
+                    itemDetails = item?.toItemDetails() ?: ItemDetails()
+                )
             }
         }
     }
@@ -69,7 +72,6 @@ fun ItemDetails.toItem(): Item = Item(
     quantity = quantity.toIntOrNull() ?: 0
 )
 
-// Função de extensão para converter Item em ItemDetails
 fun Item.toItemDetails(): ItemDetails = ItemDetails(
     id = id,
     name = name,

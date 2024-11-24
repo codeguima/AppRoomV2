@@ -1,43 +1,34 @@
 package br.edu.up.edu.rgm_29318602.ui
 
-import android.app.Application
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory
-import androidx.lifecycle.createSavedStateHandle
-import androidx.lifecycle.viewmodel.CreationExtras
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import br.edu.up.edu.rgm_29318602.InventoryApplication
+import androidx.lifecycle.SavedStateHandle
 import br.edu.up.edu.rgm_29318602.ui.item.ItemEntryViewModel
 import br.edu.up.edu.rgm_29318602.ui.item.ItemEditViewModel
 import br.edu.up.edu.rgm_29318602.ui.item.ItemDetailsViewModel
 import br.edu.up.edu.rgm_29318602.ui.home.HomeViewModel
+import br.edu.up.edu.rgm_29318602.InventoryApplication
 
 object AppViewModelProvider {
-    val Factory = viewModelFactory {
-        // Initializer for ItemEditViewModel
-        initializer {
-            ItemEditViewModel(
-                this.createSavedStateHandle()
-            )
-        }
-        // Initializer for ItemEntryViewModel
-        initializer {
-            ItemEntryViewModel(inventoryApplication().container.itemsRepository)
-        }
+    fun provideHomeViewModel(app: InventoryApplication): HomeViewModel {
+        return HomeViewModel(
+            itemsRepository = app.container.itemsRepository
+        )
+    }
 
-        // Initializer for ItemDetailsViewModel
-        initializer {
-            ItemDetailsViewModel(
-                this.createSavedStateHandle()
-            )
-        }
+    fun provideItemEntryViewModel(app: InventoryApplication): ItemEntryViewModel {
+        return ItemEntryViewModel(app.container.itemsRepository)
+    }
 
-        // Initializer for HomeViewModel
-        initializer {
-            HomeViewModel()
-        }
+    fun provideItemEditViewModel(app: InventoryApplication): ItemEditViewModel {
+        return ItemEditViewModel(
+            savedStateHandle = SavedStateHandle(), // O savedStateHandle vai ser gerenciado pelo ViewModel
+            itemsRepository = app.container.itemsRepository
+        )
+    }
+
+    fun provideItemDetailsViewModel(app: InventoryApplication): ItemDetailsViewModel {
+        return ItemDetailsViewModel(
+            savedStateHandle = SavedStateHandle(), // O savedStateHandle vai ser gerenciado pelo ViewModel
+            itemsRepository = app.container.itemsRepository
+        )
     }
 }
-
-fun CreationExtras.inventoryApplication(): InventoryApplication =
-    (this[AndroidViewModelFactory.APPLICATION_KEY] as InventoryApplication)

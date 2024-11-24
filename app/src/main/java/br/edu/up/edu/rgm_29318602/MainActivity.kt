@@ -10,18 +10,21 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import br.edu.up.edu.rgm_29318602.ui.theme.InventoryTheme
 
-
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
+
+        // Passando a instância da aplicação para o InventoryApp
+        val app = application as InventoryApplication
+
         setContent {
             InventoryTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
-                    modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
                 ) {
-                    InventoryApp()
+                    InventoryApp(app = app)  // Passa o contexto da aplicação
                 }
             }
         }

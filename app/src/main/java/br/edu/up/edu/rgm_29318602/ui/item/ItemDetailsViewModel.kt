@@ -1,6 +1,5 @@
 package br.edu.up.edu.rgm_29318602.ui.item
 
-
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -8,9 +7,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.edu.up.edu.rgm_29318602.data.ItemsRepository
-import br.edu.up.edu.rgm_29318602.data.toItemDetails
-
-
 import kotlinx.coroutines.launch
 
 class ItemDetailsViewModel(
@@ -18,7 +14,7 @@ class ItemDetailsViewModel(
     private val itemsRepository: ItemsRepository // Adicionando o repositório para obter dados
 ) : ViewModel() {
 
-    private val itemId: Int = checkNotNull(savedStateHandle[NavigationDestination.ItemDetailsScreen])
+    private val itemId: Int = savedStateHandle["itemId"] ?: throw IllegalStateException("itemId não pode ser nulo")
 
     var uiState by mutableStateOf(ItemDetailsUiState())
         private set

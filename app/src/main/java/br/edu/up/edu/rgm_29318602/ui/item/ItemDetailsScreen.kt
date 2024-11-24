@@ -41,13 +41,11 @@ import br.edu.up.edu.rgm_29318602.R
 import br.edu.up.edu.rgm_29318602.data.Item
 import br.edu.up.edu.rgm_29318602.ui.theme.InventoryTheme
 
-
-
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
+@OptIn(ExperimentalMaterial3Api::class)
 fun ItemDetailsScreen(
-    navigateToEditItem: (Int) -> Unit,
+    viewModel: ItemDetailsViewModel,
+    itemId: Int,
     navigateBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -61,7 +59,7 @@ fun ItemDetailsScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { navigateToEditItem(0) },
+                onClick = { NavigationDestination.ItemEditScreen },
                 shape = MaterialTheme.shapes.medium,
                 modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_large))
 

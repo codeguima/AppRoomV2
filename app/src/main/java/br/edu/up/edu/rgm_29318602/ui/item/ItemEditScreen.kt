@@ -22,10 +22,10 @@ import br.edu.up.edu.rgm_29318602.ui.theme.InventoryTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ItemEditScreen(
+    viewModel: ItemEditViewModel,
+    itemId: Int,
     navigateBack: () -> Unit,
-    onNavigateUp: () -> Unit,
-    modifier: Modifier = Modifier,
-    viewModel: ItemEditViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    onNavigateUp: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -35,7 +35,7 @@ fun ItemEditScreen(
                 navigateUp = onNavigateUp
             )
         },
-        modifier = modifier
+        modifier = Modifier
     ) { innerPadding ->
         ItemEntryBody(
             itemUiState = viewModel.itemUiState,
@@ -52,10 +52,3 @@ fun ItemEditScreen(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun ItemEditScreenPreview() {
-    InventoryTheme {
-        ItemEditScreen(navigateBack = { /*Do nothing*/ }, onNavigateUp = { /*Do nothing*/ })
-    }
-}
