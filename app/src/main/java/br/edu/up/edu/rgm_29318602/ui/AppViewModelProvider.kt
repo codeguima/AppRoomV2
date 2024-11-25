@@ -20,7 +20,6 @@ object AppViewModelProvider {
 
     fun provideItemEditViewModel(app: InventoryApplication): ItemEditViewModel {
         return ItemEditViewModel(
-            savedStateHandle = SavedStateHandle(), // O savedStateHandle vai ser gerenciado pelo ViewModel
             itemsRepository = app.container.itemsRepository
         )
     }

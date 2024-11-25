@@ -1,5 +1,6 @@
 [versions]
 agp = "8.7.2"
+androidxLifecycleRuntimeKtx = "2.4.0"
 hiltAndroid = "2.44"
 hiltLifecycleViewmodel = "1.0.0-alpha03"
 kotlin = "2.0.0"
@@ -17,14 +18,17 @@ ksp = "1.9.20-1.0.14"
 navigationCompose = "2.8.4"
 lifecycleViewmodelAndroid = "2.8.7"
 roomKtxVersion = "2.5.1"
+runtimeLivedata = "1.7.5"
 uiDesktop = "1.7.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-hilt-lifecycle-viewmodel = { module = "androidx.hilt:hilt-lifecycle-viewmodel", version.ref = "hiltLifecycleViewmodel" }
+androidx-lifecycle-runtime-ktx-v240 = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidxLifecycleRuntimeKtx" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
 androidx-room-ktx-v251 = { module = "androidx.room:room-ktx", version.ref = "roomKtxVersion" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomKtxVersion" }
+androidx-runtime-livedata = { module = "androidx.compose.runtime:runtime-livedata", version.ref = "runtimeLivedata" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }

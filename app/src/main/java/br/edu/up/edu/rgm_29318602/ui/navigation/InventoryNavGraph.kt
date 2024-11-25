@@ -30,18 +30,18 @@ fun InventoryNavHost(
         startDestination = NavigationDestination.HomeScreen,
         modifier = modifier
     ) {
-        // Tela HomeScreen
+        // HomeScreen
         composable(route = NavigationDestination.HomeScreen) {
             HomeScreen(
                 viewModel = homeViewModel,
                 navigateToItemEntry = { navController.navigate(NavigationDestination.ItemEntryScreen) },
-                navigateToItemUpdate = { itemId ->
-                    navController.navigate("${NavigationDestination.ItemDetailsScreen}/$itemId")
+                navigateToItemUpdate = { id ->
+                    navController.navigate("${NavigationDestination.ItemEditScreen}/$id")
                 }
             )
         }
 
-        // Tela ItemEntryScreen
+        // ItemEntryScreen
         composable(route = NavigationDestination.ItemEntryScreen) {
             ItemEntryScreen(
                 viewModel = itemEntryViewModel,
@@ -50,7 +50,8 @@ fun InventoryNavHost(
             )
         }
 
-        // Tela ItemDetailsScreen
+        // ItemDetailsScreen
+        // ItemDetailsScreen
         composable(
             route = "${NavigationDestination.ItemDetailsScreen}/{itemId}",
             arguments = listOf(navArgument("itemId") { type = NavType.IntType })
@@ -60,14 +61,16 @@ fun InventoryNavHost(
                 return@composable
             }
             ItemDetailsScreen(
-                itemDetailsViewModel,
-                itemId = itemId,
+                id = itemId,
+                navController = navController, // Adicionando navController como argumento
                 navigateBack = { navController.popBackStack() },
-                modifier = modifier,
+                modifier = modifier
             )
         }
 
-        // Tela ItemEditScreen
+
+
+        // ItemEditScreen
         composable(
             route = "${NavigationDestination.ItemEditScreen}/{itemId}",
             arguments = listOf(navArgument("itemId") { type = NavType.IntType })

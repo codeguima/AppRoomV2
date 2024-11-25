@@ -3,7 +3,6 @@ package br.edu.up.edu.rgm_29318602.ui.item
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.edu.up.edu.rgm_29318602.data.Item
@@ -11,47 +10,47 @@ import br.edu.up.edu.rgm_29318602.data.ItemsRepository
 import kotlinx.coroutines.launch
 
 class ItemEditViewModel(
-    savedStateHandle: SavedStateHandle,
-    private val itemsRepository: ItemsRepository // Injetando o repositório
+    private val itemsRepository: ItemsRepository
 ) : ViewModel() {
 
     var itemUiState by mutableStateOf(ItemUiState())
         private set
 
-    private val itemId: Int = checkNotNull(savedStateHandle["itemId"]) {
-        "itemId não pode ser nulo"
-    }
-
-    init {
-        loadItem(itemId)
-    }
-
-    private fun loadItem(itemId: Int) {
+    /**
+     * Carrega os dados do item com base no ID.
+     */
+    fun loadItem(id: Int) {
         viewModelScope.launch {
-            itemsRepository.getItemStream(itemId).collect { item ->
-                itemUiState = ItemUiState(
-                    itemDetails = item?.toItemDetails() ?: ItemDetails()
-                )
+            itemsRepository.getItemStream(id).collect { item ->
+                item?.let {
+                    itemUiState = itemUiState.copy(
+                        itemDetails = it.toItemDetails()
+                    )
+                }
             }
         }
     }
 
-    fun updateItem(itemDetails: ItemDetails) {
-        itemUiState = itemUiState.copy(itemDetails = itemDetails, isEntryValid = validateInput(itemDetails))
+
+    /**
+     * Atualiza o estado do formulário de entrada.
+     */
+    fun updateUiState(newDetails: ItemDetails) {
+        itemUiState = itemUiState.copy(itemDetails = newDetails)
     }
 
-    suspend fun saveItem() {
-        if (validateInput()) {
-            itemsRepository.updateItem(itemUiState.itemDetails.toItem())
+    /**
+     * Salva as alterações feitas no item.
+     */
+    fun updateItem(id: Int) {
+        viewModelScope.launch {
+            val updatedItem = itemUiState.itemDetails.toItem()
+            itemsRepository.updateItem(updatedItem)
         }
     }
 
-    private fun validateInput(uiState: ItemDetails = itemUiState.itemDetails): Boolean {
-        return with(uiState) {
-            name.isNotBlank() && price.isNotBlank() && quantity.isNotBlank()
-        }
-    }
 }
+
 
 data class ItemUiState(
     val itemDetails: ItemDetails = ItemDetails(),
@@ -68,9 +67,10 @@ data class ItemDetails(
 fun ItemDetails.toItem(): Item = Item(
     id = id,
     name = name,
-    price = price.toDoubleOrNull() ?: 0.0,
-    quantity = quantity.toIntOrNull() ?: 0
+    price = price.toDoubleOrNull() ?: throw IllegalArgumentException("Preço inválido"),
+    quantity = quantity.toIntOrNull() ?: throw IllegalArgumentException("Quantidade inválida")
 )
+
 
 fun Item.toItemDetails(): ItemDetails = ItemDetails(
     id = id,

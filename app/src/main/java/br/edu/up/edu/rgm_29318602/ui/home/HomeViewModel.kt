@@ -1,18 +1,18 @@
 package br.edu.up.edu.rgm_29318602.ui.home
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.edu.up.edu.rgm_29318602.data.Item
 import br.edu.up.edu.rgm_29318602.data.ItemsRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class HomeViewModel(private val itemsRepository: ItemsRepository) : ViewModel() {
 
-    var uiState by mutableStateOf(HomeUiState())
-        private set
+    // Mudança para StateFlow, que é mais adequado para Jetpack Compose
+    private val _uiState = MutableStateFlow(HomeUiState())
+    val uiState: StateFlow<HomeUiState> = _uiState
 
     init {
         loadItems()
@@ -21,7 +21,7 @@ class HomeViewModel(private val itemsRepository: ItemsRepository) : ViewModel() 
     private fun loadItems() {
         viewModelScope.launch {
             itemsRepository.getAllItemsStream().collect { itemList ->
-                uiState = HomeUiState(itemList)
+                _uiState.value = HomeUiState(itemList)
             }
         }
     }

@@ -66,6 +66,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    implementation (libs.androidx.lifecycle.runtime.ktx.v240)
+    implementation (libs.androidx.runtime.livedata)
+
     // Hilt dependencies
     implementation(libs.androidx.hilt.lifecycle.viewmodel)
     implementation(libs.hilt.android)

@@ -36,6 +36,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
 import br.edu.up.edu.rgm_29318602.InventoryTopAppBar
 import br.edu.up.edu.rgm_29318602.R
 import br.edu.up.edu.rgm_29318602.data.Item
@@ -44,9 +45,9 @@ import br.edu.up.edu.rgm_29318602.ui.theme.InventoryTheme
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun ItemDetailsScreen(
-    viewModel: ItemDetailsViewModel,
-    itemId: Int,
+    id: Int,
     navigateBack: () -> Unit,
+    navController: NavController,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -59,17 +60,17 @@ fun ItemDetailsScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { NavigationDestination.ItemEditScreen },
+                onClick = { navController.navigate("${NavigationDestination.ItemEditScreen}/$id")},
                 shape = MaterialTheme.shapes.medium,
                 modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_large))
-
             ) {
                 Icon(
                     imageVector = Icons.Default.Edit,
                     contentDescription = stringResource(R.string.edit_item_title),
                 )
             }
-        }, modifier = modifier
+        },
+        modifier = modifier
     ) { innerPadding ->
         ItemDetailsBody(
             itemDetailsUiState = ItemDetailsUiState(),
@@ -85,6 +86,7 @@ fun ItemDetailsScreen(
         )
     }
 }
+
 
 @Composable
 private fun ItemDetailsBody(
