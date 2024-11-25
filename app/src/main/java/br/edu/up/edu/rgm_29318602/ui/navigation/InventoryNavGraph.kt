@@ -1,90 +1,55 @@
 package br.edu.up.edu.rgm_29318602.ui.navigation
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
-import br.edu.up.edu.rgm_29318602.ui.item.ItemDetailsScreen
-import br.edu.up.edu.rgm_29318602.ui.item.ItemEditScreen
-import br.edu.up.edu.rgm_29318602.ui.item.ItemEntryScreen
-import br.edu.up.edu.rgm_29318602.ui.home.HomeScreen
-import br.edu.up.edu.rgm_29318602.ui.item.ItemDetailsViewModel
-import br.edu.up.edu.rgm_29318602.ui.item.ItemEditViewModel
-import br.edu.up.edu.rgm_29318602.ui.item.ItemEntryViewModel
-import br.edu.up.edu.rgm_29318602.ui.home.HomeViewModel
+import androidx.navigation.compose.rememberNavController
+import br.edu.up.edu.rgm_29318602.ui.screens.HomeScreen
+import br.edu.up.edu.rgm_29318602.ui.viewmodels.InventoryViewModel
+import br.edu.up.edu.rgm_29318602.ui.views.ItemEditScreen
+import br.edu.up.edu.rgm_29318602.ui.views.ItemEntryScreen
+
 
 @Composable
 fun InventoryNavHost(
-    homeViewModel: HomeViewModel,
-    itemEntryViewModel: ItemEntryViewModel,
-    itemEditViewModel: ItemEditViewModel,
-    itemDetailsViewModel: ItemDetailsViewModel,
-    navController: NavHostController,
-    modifier: Modifier = Modifier,
+    viewModel: InventoryViewModel
 ) {
+    val navController = rememberNavController()
+
     NavHost(
         navController = navController,
         startDestination = NavigationDestination.HomeScreen,
-        modifier = modifier
+        modifier = Modifier.fillMaxSize()
     ) {
-        // HomeScreen
-        composable(route = NavigationDestination.HomeScreen) {
+        composable(NavigationDestination.HomeScreen) {
             HomeScreen(
-                viewModel = homeViewModel,
-                navigateToItemEntry = { navController.navigate(NavigationDestination.ItemEntryScreen) },
-                navigateToItemUpdate = { id ->
-                    navController.navigate("${NavigationDestination.ItemEditScreen}/$id")
-                }
+                viewModel = viewModel,
+                navController = navController
             )
         }
 
-        // ItemEntryScreen
-        composable(route = NavigationDestination.ItemEntryScreen) {
+        // Rota para a tela de criação de itens
+        composable(NavigationDestination.ItemEntryScreen) {
             ItemEntryScreen(
-                viewModel = itemEntryViewModel,
                 navigateBack = { navController.popBackStack() },
-                onNavigateUp = { navController.navigateUp() }
+                viewModel = viewModel,
             )
         }
 
-        // ItemDetailsScreen
-        // ItemDetailsScreen
-        composable(
-            route = "${NavigationDestination.ItemDetailsScreen}/{itemId}",
-            arguments = listOf(navArgument("itemId") { type = NavType.IntType })
-        ) {
-            val itemId = it.arguments?.getInt("itemId") ?: run {
-                navController.popBackStack()
-                return@composable
+        // Rota para a edição de itens com ID como argumento
+        composable("itemEdit/{itemId}") { backStackEntry ->
+            val itemId = backStackEntry.arguments?.getString("itemId")?.toInt()
+            itemId?.let {
+                ItemEditScreen(
+                    viewModel = viewModel,
+                    itemId = it,
+                    navigateBack = { navController.popBackStack() }
+                )
             }
-            ItemDetailsScreen(
-                id = itemId,
-                navController = navController, // Adicionando navController como argumento
-                navigateBack = { navController.popBackStack() },
-                modifier = modifier
-            )
-        }
-
-
-
-        // ItemEditScreen
-        composable(
-            route = "${NavigationDestination.ItemEditScreen}/{itemId}",
-            arguments = listOf(navArgument("itemId") { type = NavType.IntType })
-        ) {
-            val itemId = it.arguments?.getInt("itemId") ?: run {
-                navController.popBackStack()
-                return@composable
-            }
-            ItemEditScreen(
-                viewModel = itemEditViewModel,
-                itemId,
-                navigateBack = { navController.popBackStack() },
-                onNavigateUp = { navController.navigateUp() }
-            )
         }
     }
+
 }

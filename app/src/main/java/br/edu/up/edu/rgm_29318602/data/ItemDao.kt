@@ -1,27 +1,26 @@
 package br.edu.up.edu.rgm_29318602.data
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import kotlinx.coroutines.flow.Flow
+import androidx.room.Delete
 
 @Dao
 interface ItemDao {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(item: Item)
+
+    @Insert
+    suspend fun insertItem(item: Item)
 
     @Update
-    suspend fun update(item: Item)
+    suspend fun updateItem(item: Item)
 
     @Delete
-    suspend fun delete(item: Item)
+    suspend fun deleteItem(item: Item)
 
-    @Query("SELECT * from items WHERE id = :id")
-    fun getItem(id: Int): Flow<Item>
+    @Query("SELECT * FROM items")
+    suspend fun getAllItems(): List<Item>
 
-    @Query("SELECT * from items ORDER BY name ASC")
-    fun getAllItems(): Flow<List<Item>>
+    @Query("SELECT * FROM items WHERE id = :id")
+    suspend fun getItemById(id: Int): Item
 }

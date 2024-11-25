@@ -4,20 +4,26 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import kotlin.reflect.KParameter
 
-@Database(entities = [Item::class], version = 1, exportSchema = false)
-abstract class InventoryDatabase : RoomDatabase() {
+@Database(
+    entities = [
+        Item::class
+    ],
+    version = 1)
+
+abstract class AppDatabase : RoomDatabase() {
+
     abstract fun itemDao(): ItemDao
 
-    companion object {
-        @Volatile
-        private var INSTANCE: InventoryDatabase? = null
-
-        fun getDatabase(context: Context): InventoryDatabase {
-            return INSTANCE ?: synchronized(this) {
-                Room.databaseBuilder(context, InventoryDatabase::class.java, "item_database")
-                    .build().also { INSTANCE = it }
-            }
-        }
-    }
 }
+
+// 4) Abrir o banco de dados
+fun abrirBanco(context: Context): AppDatabase {
+    return Room.databaseBuilder(
+        context.applicationContext,
+        AppDatabase::class.java,
+        name = "inventory_db"
+    ).build()
+}
+
